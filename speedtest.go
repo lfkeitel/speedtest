@@ -42,7 +42,7 @@ type telemetry struct {
 func init() {
 	rand.Seed(time.Now().UnixNano())
 
-	flag.StringVar(&httpAddress, "addr", "localhost:8080", "HTTP address and port to bind")
+	flag.StringVar(&httpAddress, "addr", ":8080", "HTTP address and port to bind")
 }
 
 func main() {
@@ -60,7 +60,6 @@ func main() {
 		}
 
 		file = filepath.Join("public", file)
-		fmt.Printf("Request for %s\n", file)
 		http.ServeFile(w, r, file)
 	})
 
@@ -123,7 +122,11 @@ func main() {
 		fmt.Printf("%s\n", log)
 	})
 
-	fmt.Printf("Now listening on http://%s\n", httpAddress)
+	if httpAddress[0] == ':' {
+		fmt.Printf("Now listening on http://localhost%s\n", httpAddress)
+	} else {
+		fmt.Printf("Now listening on http://%s\n", httpAddress)
+	}
 	if err := http.ListenAndServe(httpAddress, nil); err != nil {
 		fmt.Println(err)
 	}
@@ -135,8 +138,6 @@ func nocacheHeaders(w http.ResponseWriter) {
 }
 
 func generateGarbage() {
-	fmt.Println("Generating garbage")
-
 	garbage = make([]byte, garbageLen)
 	n, err := rand.Read(garbage)
 	if err != nil {

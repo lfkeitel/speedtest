@@ -8,6 +8,7 @@
     },
 
     "rules": {
+        "curly": ["error", "all"],
         "space-before-function-paren": ["error", "never"]
     }
 }
