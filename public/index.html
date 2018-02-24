@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+    <title>HTML5 Speedtest</title>
+    <link rel="stylesheet" href="speedtest.css">
+</head>
+
+<body>
+    <h1>HTML5 Speedtest</h1>
+    <div id="startStopBtn" onclick="startStop()"></div>
+    <div id="test">
+        <div class="testGroup">
+            <div class="testArea">
+                <div class="testName">Download</div>
+                <canvas id="dlMeter" class="meter"></canvas>
+                <div id="dlText" class="meterText"></div>
+                <div class="unit">Mbps</div>
+            </div>
+            <div class="testArea">
+                <div class="testName">Upload</div>
+                <canvas id="ulMeter" class="meter"></canvas>
+                <div id="ulText" class="meterText"></div>
+                <div class="unit">Mbps</div>
+            </div>
+        </div>
+        <div class="testGroup">
+            <div class="testArea">
+                <div class="testName">Ping</div>
+                <canvas id="pingMeter" class="meter"></canvas>
+                <div id="pingText" class="meterText"></div>
+                <div class="unit">ms</div>
+            </div>
+            <div class="testArea">
+                <div class="testName">Jitter</div>
+                <canvas id="jitMeter" class="meter"></canvas>
+                <div id="jitText" class="meterText"></div>
+                <div class="unit">ms</div>
+            </div>
+        </div>
+        <div id="ipArea">
+            IP Address: <span id="ip"></span>
+        </div>
+    </div>
+
+    <a href="https://github.com/lfkeitel/speedtest">Source code (Server)</a>
+    <a href="https://github.com/adolfintel/speedtest">Source code (Speed test)</a>
+    <!--<script type="text/javascript">setTimeout(initUI,100);</script>-->
+    <script type="text/javascript" src="speedtest.js"></script>
+</body>
+</html>
