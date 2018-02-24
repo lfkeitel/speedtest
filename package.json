@@ -1,0 +1,23 @@
+{
+  "name": "speedtest",
+  "version": "1.0.0",
+  "description": "Speedy test is a full-service implementation of https://github.com/adolfintel/speedtest.",
+  "scripts": {
+    "uglify": "uglifyjs --compress --mangle -o public/speedtest_worker.min.js -- public/speedtest_worker.js",
+    "test": "eslint public/speedtest_worker.js public/speedtest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lfkeitel/speedtest.git"
+  },
+  "author": "Lee Keitel",
+  "license": "LGPL-3.0+",
+  "bugs": {
+    "url": "https://github.com/lfkeitel/speedtest/issues"
+  },
+  "homepage": "https://github.com/lfkeitel/speedtest#readme",
+  "devDependencies": {
+    "semistandard": "^12.0.1",
+    "uglify-js": "^3.3.12"
+  }
+}

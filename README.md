@@ -10,6 +10,17 @@ which will serve a speedtest for users.
 Please refer to the upstream project documentation at https://github.com/adolfintel/speedtest/blob/master/doc.md
 for advanced options you can use in speedtest.js.
 
+## Contributing
+
+Contributions are welcome! Before submitting PRs, please make sure your changes pass the lint tests
+and make sure to regenerate the minified file.
+
+```shell
+npm install
+npm test
+npm run uglify
+```
+
 ## License
 
 Server code:
