@@ -35,16 +35,20 @@ type dbInit func() (TelemetryDB, error)
 var telemetryDBInits = map[string]dbInit{}
 
 type Telemetry struct {
-	Timestamp time.Time
-	Remote    net.IP  `json:"remote"`
-	UA        string  `json:"ua"`
-	DL        float64 `json:"dl"`
-	UL        float64 `json:"ul"`
-	Ping      float64 `json:"ping"`
-	Jitter    float64 `json:"jitter"`
-	Log       string  `json:"log"`
-	Building  string  `json:"building"`
-	SessionID string  `json:"sessionid"`
+	Timestamp time.Time `json:"timestamp"`
+	Remote    net.IP    `json:"remote"`
+	UA        string    `json:"ua"`
+	DL        float64   `json:"dl"`
+	UL        float64   `json:"ul"`
+	Ping      float64   `json:"ping"`
+	Jitter    float64   `json:"jitter"`
+	Log       string    `json:"log"`
+	Building  string    `json:"building"`
+	SessionID string    `json:"sessionid"`
+}
+
+func (t *Telemetry) String() string {
+	return fmt.Sprintf("Telemetry: Client: %s, DL: %f, UL: %f, Ping: %f, Jitter: %f", t.Remote, t.DL, t.UL, t.Ping, t.Jitter)
 }
 
 func registerTelemDBInit(name string, i dbInit) {

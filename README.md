@@ -54,8 +54,9 @@ is named "speedtest". Please edit accordingly.
 ### Other database types
 
 * `none`: Disables telemetry storage.
-* `log`: Prints telemetry data to stdout in JSON format.
+* `console`: Prints telemetry data to stdout.
 * `csv`: Saves telemetry data in CSV format to a file.
+* `json`: Saves telemetry data in JSON format to a file. One JSON object per line.
 
 ### Session ID
 

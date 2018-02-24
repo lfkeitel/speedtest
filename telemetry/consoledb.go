@@ -1,12 +1,11 @@
 package telemetry
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
 func init() {
-	registerTelemDBInit("log", NewLogDB)
+	registerTelemDBInit("console", NewLogDB)
 }
 
 type LogDB struct{}
@@ -16,7 +15,6 @@ func NewLogDB() (TelemetryDB, error) {
 }
 
 func (db *LogDB) Save(t *Telemetry) error {
-	log, _ := json.Marshal(t)
-	fmt.Printf("%s\n", log)
+	fmt.Println(t.String())
 	return nil
 }
