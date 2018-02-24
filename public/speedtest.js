@@ -1,5 +1,9 @@
 function I(id) { return document.getElementById(id); }
 
+var workerOptions = {
+  telemetry_level: 'basic'
+};
+
 var meterBk = '#E0E0E0';
 var dlColor = '#6060AA';
 var ulColor = '#309030';
@@ -70,7 +74,7 @@ function startStop() {
     initUI();
 
     w = new Worker('speedtest_worker.min.js');
-    w.postMessage('start'); // Add optional parameters as a JSON object to this command
+    w.postMessage('start ' + JSON.stringify(workerOptions)); // Add optional parameters as a JSON object to this command
 
     I('startStopBtn').classList.add('running');
     I('status').textContent = 'Running';
