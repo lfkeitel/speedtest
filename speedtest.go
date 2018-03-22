@@ -11,7 +11,6 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/lfkeitel/speedtest/telemetry"
@@ -21,12 +20,6 @@ import (
 const garbageLen = 1048576
 
 var (
-	contentTypes = map[string]string{
-		".css":  "text/css",
-		".js":   "text/javascript",
-		".html": "text/html",
-	}
-
 	garbage []byte
 
 	httpAddress     string
@@ -44,17 +37,17 @@ func main() {
 	flag.Parse()
 	generateGarbage()
 
-	http.HandleFunc("/", rootHandler)
-	http.HandleFunc("/empty.php", emptyHandler)
-	http.HandleFunc("/getIP.php", getIPHandler)
-	http.HandleFunc("/garbage.php", garbageHandler)
+	http.HandleFunc("/", logHandler(rootHandler))
+	http.HandleFunc("/empty.php", logHandler(emptyHandler))
+	http.HandleFunc("/getIP.php", logHandler(getIPHandler))
+	http.HandleFunc("/garbage.php", logHandler(garbageHandler))
 
 	teleDB, err := telemetry.MakeDB(telemetryDBType)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	http.HandleFunc("/telemetry.php", telemetry.HTTPHandler(teleDB))
+	http.HandleFunc("/telemetry.php", logHandler(telemetry.HTTPHandler(teleDB)))
 
 	if httpAddress[0] == ':' {
 		fmt.Printf("Now listening on http://localhost%s\n", httpAddress)
@@ -64,6 +57,50 @@ func main() {
 
 	if err := http.ListenAndServe(httpAddress, nil); err != nil {
 		fmt.Println(err)
+	}
+}
+
+type responseWriter struct {
+	http.ResponseWriter
+	length    int
+	status    int
+	startTime time.Time
+}
+
+func (w *responseWriter) Write(b []byte) (n int, err error) {
+	n, err = w.ResponseWriter.Write(b)
+	w.length += n
+	return
+}
+
+func (w *responseWriter) WriteHeader(status int) {
+	w.status = status
+	w.ResponseWriter.WriteHeader(status)
+}
+
+func (w *responseWriter) requestTime() time.Duration {
+	return time.Since(w.startTime)
+}
+
+func logHandler(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		newW := &responseWriter{
+			ResponseWriter: w,
+			status:         200,
+			startTime:      time.Now(),
+		}
+
+		next(newW, r)
+
+		fmt.Printf(
+			"%s %s \"%s\" %d %d %s\n",
+			r.RemoteAddr,
+			r.Method,
+			r.URL.Path,
+			newW.status,
+			newW.length,
+			newW.requestTime().String(),
+		)
 	}
 }
 
@@ -103,10 +140,6 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	file := r.URL.Path
 	if file == "/" {
 		file = "/index.html"
-	}
-	if strings.Contains(file, "..") {
-		w.WriteHeader(http.StatusNotFound)
-		return
 	}
 
 	file = filepath.Join("public", file)
